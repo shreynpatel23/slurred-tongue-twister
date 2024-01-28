@@ -1,6 +1,6 @@
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var SpeechRecognitionEvent =
-  window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
+  SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 const phrases = [
   "How are you",
   "you can pronounce it",
@@ -68,6 +68,9 @@ const negativeMessages = [
 let score = 0;
 let isPhraseVisible = false;
 let sentenceCount = 0;
+const maxScore = localStorage.getItem('maxScore') || 0;
+var phrase;
+
 const timerWrapper = document.getElementById("timer-wrapper");
 const startWrapper = document.getElementById("start-game-wrapper");
 const phraseWrapper = document.getElementById("phrase-wrapper");
@@ -84,11 +87,14 @@ const scoreValue = document.getElementById("score");
 const textReceived = document.getElementById("text-received");
 const finalScore = document.getElementById("final-score");
 const endGameButton = document.getElementById("end-game");
+const maxScoreWrapper = document.querySelector('.max-score');
+const maxScoreValue = document.getElementById('max-score');
 
 timerWrapper.style.display = "none";
 phraseWrapper.style.display = "none";
 resultWrapper.style.display = "none";
 loading.style.display = "none";
+maxScoreValue.innerHTML = maxScore;
 
 var recognition = new SpeechRecognition();
 
@@ -108,9 +114,12 @@ function timeCounter() {
     timeValue.innerHTML = `${min <= 9 ? `0${min}` : min} : ${
       sec <= 9 ? `0${sec}` : sec
     }`;
+    finalScore.innerHTML = `Your game has ended your <br /> score is ${score}`;
     if (seconds === 0) {
       clearInterval(interval);
-      recognition.stop();
+      if(score > maxScore) {
+        localStorage.setItem('maxScore', score);
+      }
       timerWrapper.style.display = "none";
       phraseWrapper.style.display = "none";
       resultWrapper.style.display = "block";
@@ -143,17 +152,23 @@ function testSpeech() {
     var speechResult = event.results[0][0].transcript.toLowerCase();
     textReceived.innerHTML = "Speech received: " + speechResult + ".";
 
+    // if(speechResult == "" || speechResult == null || speechResult == undefined){
+      
+    // }
     if (speechResult == phrase) {
-      // fire the negative feedback
       const randomNumber = Math.ceil(Math.random() * 20);
       matchResult.textContent = positiveMessages[randomNumber];
       matchResult.style.color = "green";
+      score += 1;
+      scoreValue.innerHTML = `score ${score}`;
       var utter = new window.SpeechSynthesisUtterance(
         positiveMessages[randomNumber]
-      );
-      utter.lang = "en-ca";
-      window.speechSynthesis.speak(utter);
-    } else {
+        );
+        utter.lang = "en-ca";
+        window.speechSynthesis.speak(utter);
+        setTimeout("showPhrase()", 1000);
+      } else {
+      // fire the negative feedback
       const randomNumber = Math.ceil(Math.random() * 20);
       matchResult.textContent = negativeMessages[randomNumber];
       matchResult.style.color = "red";
@@ -162,10 +177,8 @@ function testSpeech() {
       );
       utter.lang = "en-ie";
       window.speechSynthesis.speak(utter);
+      setTimeout("showPhrase()", 1000);
     }
-    isPhraseVisible = false;
-    setTimeout(showPhrase, 2000);
-    console.log("Confidence: " + event.results[0][0].confidence);
   };
 
   recognition.onspeechend = function () {
@@ -235,13 +248,11 @@ function toggleSvg() {
 }
 
 function showPhrase(){
-  var phrase = phrases[randomPhrase()];
   // To ensure case consistency while checking with the returned output text
-  phrase = phrase.toLowerCase();
+  let newPhrase = phrases[randomPhrase()];
+  phrase = newPhrase.toLowerCase();
   phraseText.textContent = phrase;
   isPhraseVisible = true;
-  //   resultPara.textContent = "Right or wrong?";
-  //   diagnosticPara.textContent = "...diagnostic messages";
   sentenceCount++;
   //console.log(score/sentenceCount);
 }
@@ -253,8 +264,10 @@ startGameButton.addEventListener("click", function () {
     showPhrase();
   }
   startWrapper.style.display = "none";
+  maxScoreWrapper.style.display = "none";
   phraseWrapper.style.display = "block";
   timerWrapper.style.display = "block";
+  scoreValue.innerHTML = `score ${score}`;
   timeCounter();
 });
 

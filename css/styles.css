@@ -27,6 +27,7 @@ h1, h2, p, a {
 }
 
 .max-score {
+    font-size: 0.8em;
     margin-top: 0;
     margin-bottom: 1em;
 }
@@ -45,7 +46,7 @@ h1, h2, p, a {
 }
 
 .text {
-    font-size: 4em;
+    font-size: 3em;
     line-height: 1.5;
     color: #fff;
     text-align: center;
@@ -97,4 +98,8 @@ h1, h2, p, a {
 
 .hide {
     display: none;
+}
+
+.score {
+    font-size: 1.5em;
 }
