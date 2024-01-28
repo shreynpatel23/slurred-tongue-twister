@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width" />
+
+    <title>Phrase matcher</title>
+
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <h1 class="brand-name">Phrase matcher</h1>
+    <div id="timer-wrapper">
+        <p class="label">Time Left</p>
+        <p class="timer" id="timeValue">00 : 00</p>
+    </div>
+    <div id="start-game-wrapper">
+        <p class="text">Welcome to our <br> tongue twister</p>
+        <button class="button" id="start-game">Start Game</button>
+    </div>
+    <div id="phrase-wrapper">
+        <p class="text" id="phrase">Click on the mic icon <br> ...</p>
+        <button class="record-button" id="record-button">
+            <svg id="svg" width="32" height="32" viewBox="0 0 42 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M21 0C15.2031 0 10.5 4.70312 10.5 10.5V28C10.5 33.7969 15.2031 38.5 21 38.5C26.7969 38.5 31.5 33.7969 31.5 28V10.5C31.5 4.70312 26.7969 0 21 0ZM7 23.625C7 22.1703 5.82969 21 4.375 21C2.92031 21 1.75 22.1703 1.75 23.625V28C1.75 37.7453 8.99062 45.7953 18.375 47.075V50.75H13.125C11.6703 50.75 10.5 51.9203 10.5 53.375C10.5 54.8297 11.6703 56 13.125 56H21H28.875C30.3297 56 31.5 54.8297 31.5 53.375C31.5 51.9203 30.3297 50.75 28.875 50.75H23.625V47.075C33.0094 45.7953 40.25 37.7453 40.25 28V23.625C40.25 22.1703 39.0797 21 37.625 21C36.1703 21 35 22.1703 35 23.625V28C35 35.7328 28.7328 42 21 42C13.2672 42 7 35.7328 7 28V23.625Z"
+                    fill="#e8547b" />
+            </svg>
+            <p id="loading">...</p>
+        </button>
+        <p class="result" id="matchResult"></p>
+        <p class="result" id="text-received"></p>
+        <p class="result" id="score">score</p>
+    </div>
+
+    <div id="result-wrapper">
+        <p class="text">Your game has ended your score is</p>
+        <p class="score" id="final-score"></p>
+        <button class="button" id="end-game">Home</button>
+    </div>
+
+    <script src="index.js"></script>
+    <script src="constants.js"></script>
+</body>
+
+</html>
