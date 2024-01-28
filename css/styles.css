@@ -9,6 +9,11 @@ body {
     padding: 2em;
 }
 
+img{
+    width: 200px;
+    height: auto;
+}
+
 h1, h2, p, a {
     margin: 0;
 }
