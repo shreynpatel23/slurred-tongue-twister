@@ -19,6 +19,35 @@ const phrases = [
   "Fred fed Ted bread and Ted fed Fred bread",
   "A black bug bleeds black blood what color blood does a blue bug bleed",
   "I scream you scream we all scream for ice cream",
+  "6 slippery snails slid silently southward",
+  "Betty Botter bought some butter but she said this butters bitter if I put it in my batter it will make my batter bitter but a bit of better butter will make my batter better",
+  "She sells seashells by the seashore The shells she sells are surely seashells",
+  "How can a clam cram in a clean cream can",
+  "Unique New York you know you need Unique New York",
+  "Red lorry yellow lorry",
+  "Peter Piper picked a peck of pickled peppers",
+  "I saw Susie sitting in a shoeshine shop",
+  "A black bug bleeds black blood what color blood does a blue bug bleed",
+  "How much wood would a woodchuck chuck if a woodchuck could chuck wood",
+  "I wish to wash my Irish wristwatch",
+  "Three free throws",
+  "Lesser leather never weathered wetter weather better",
+  "Freshly fried flying fish",
+  "A big black bug bleeds black blood",
+  "Thin sticks thick bricks",
+  "Silly sheep weep and sleep",
+  "4 furious friends fought for the phone",
+  "Swirling twirling whisking wisps",
+  "An ape hates grape cakes",
+  "Willies really weary",
+  "A skunk sat on a stump and thunk the stump stunk but the stump thunk the skunk stunk",
+  "She sees cheese",
+  "He threw three free throws",
+  "A proper copper coffee pot",
+  "6 slippery snails slid slowly seaward",
+  "How can a clam cram in a clean cream can",
+  "Rubber baby buggy bumpers",
+  "A black backed beetle with a black back blacked the blackboard",
 ];
 
 const positiveMessages = [
@@ -70,7 +99,7 @@ let hasUserSpoken = false;
 let score = 0;
 let isPhraseVisible = false;
 let sentenceCount = 0;
-const maxScore = localStorage.getItem('maxScore') || 0;
+const maxScore = localStorage.getItem("maxScore") || 0;
 var phrase;
 
 const timerWrapper = document.getElementById("timer-wrapper");
@@ -91,9 +120,9 @@ const scoreValue = document.getElementById("score");
 const textReceived = document.getElementById("text-received");
 const finalScore = document.getElementById("final-score");
 const endGameButton = document.getElementById("end-game");
-const maxScoreWrapper = document.querySelector('.max-score');
-const maxScoreValue = document.getElementById('max-score');
-const userSpokenError = document.getElementById('hasUserSpoken');
+const maxScoreWrapper = document.querySelector(".max-score");
+const maxScoreValue = document.getElementById("max-score");
+const userSpokenError = document.getElementById("hasUserSpoken");
 
 timerWrapper.style.display = "none";
 phraseWrapper.style.display = "none";
@@ -116,14 +145,16 @@ function timeCounter() {
     const sec = seconds % 60;
     const min = parseInt(seconds / 60);
 
-    timeValue.innerHTML = `${min <= 9 ? `0${min}` : min} : ${sec <= 9 ? `0${sec}` : sec
-      }`;
+    timeValue.innerHTML = `${min <= 9 ? `0${min}` : min} : ${
+      sec <= 9 ? `0${sec}` : sec
+    }`;
     finalScore.innerHTML = `Your game has ended  <br /> your score is ${score}`;
     if (seconds === 0) {
       clearInterval(interval);
       if (score > maxScore) {
-        localStorage.setItem('maxScore', score);
-        winnerImg.innerHTML = "<p class='result'>You are the new high scorer!!!</p><img src='./images/winner.png' height='100px' width='100px'></img>";
+        localStorage.setItem("maxScore", score);
+        winnerImg.innerHTML =
+          "<p class='result'>You are the new high scorer!!!</p><img src='./images/winner.png' height='100px' width='100px'></img>";
       }
       timerWrapper.style.display = "none";
       phraseWrapper.style.display = "none";
@@ -173,9 +204,10 @@ function testSpeech() {
 
   recognition.onspeechend = function (event) {
     if (!hasUserSpoken) {
-      userSpokenError.innerHTML = "We did not get your message, Can you please speak again";
+      userSpokenError.innerHTML =
+        "We did not get your message, Can you please speak again";
     }
-    console.log('event', event);
+    console.log("event", event);
     recordButton.disabled = false;
     toggleSvg();
   };
@@ -187,7 +219,7 @@ function testSpeech() {
 
   recognition.onaudioend = function (event) {
     //Fired when the user agent has finished capturing audio.
-    IMLoading.innerHTML = '';
+    IMLoading.innerHTML = "";
     console.log("SpeechRecognition.onaudioend");
   };
 
@@ -199,8 +231,7 @@ function testSpeech() {
 
   recognition.onerror = function (event) {
     recordButton.disabled = false;
-    phraseText.textContent =
-      "Error occurred in recognition: " + event.error;
+    phraseText.textContent = "Error occurred in recognition: " + event.error;
   };
 
   recognition.onresult = function (event) {
@@ -213,15 +244,15 @@ function testSpeech() {
     // The second [0] returns the SpeechRecognitionAlternative at position 0.
     // We then return the transcript property of the SpeechRecognitionAlternative object
     var speechResult = event.results[0][0].transcript.toLowerCase();
-    if(speechResult) {
-      hasUserSpoken = true
-    };
+    if (speechResult) {
+      hasUserSpoken = true;
+    }
     userSpokenError.innerHTML = "";
 
     textReceived.innerHTML = "Speech received: " + speechResult + ".";
 
     if (speechResult == phrase) {
-      const randomNumber = Math.ceil(Math.random() * 20);
+      const randomNumber = Math.ceil(Math.random() * positiveMessages.length);
       matchResult.textContent = positiveMessages[randomNumber];
       matchResult.style.color = "green";
       score += 1;
@@ -232,14 +263,14 @@ function testSpeech() {
       utter.lang = "en-ca";
       window.speechSynthesis.speak(utter);
       setTimeout("showPhrase()", 1000);
-      imgContainer.innerHTML = "<img src='./images/positive.png' height='100px' width='100px'></img>";
+      imgContainer.innerHTML =
+        "<img src='./images/positive.png' height='100px' width='100px'></img>";
       setTimeout(function () {
         imgContainer.innerHTML = "";
       }, 3000);
-
     } else {
       // fire the negative feedback
-      const randomNumber = Math.ceil(Math.random() * 20);
+      const randomNumber = Math.ceil(Math.random() * negativeMessages.length);
       matchResult.textContent = negativeMessages[randomNumber];
       matchResult.style.color = "red";
       var utter = new window.SpeechSynthesisUtterance(
@@ -248,7 +279,8 @@ function testSpeech() {
       utter.lang = "en-ie";
       window.speechSynthesis.speak(utter);
       setTimeout("showPhrase()", 1000);
-      imgContainer.innerHTML = "<img src='./images/negative.png' height='100px' width='100px'></img>";
+      imgContainer.innerHTML =
+        "<img src='./images/negative.png' height='100px' width='100px'></img>";
       setTimeout(function () {
         imgContainer.innerHTML = "";
       }, 3000);
@@ -277,7 +309,7 @@ function showPhrase() {
   phraseText.textContent = phrase;
   isPhraseVisible = true;
   sentenceCount++;
-  setTimeout(function (){
+  setTimeout(function () {
     textReceived.innerHTML = "";
     matchResult.innerHTML = "";
   }, 2000);
