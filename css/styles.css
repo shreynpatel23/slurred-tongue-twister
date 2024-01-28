@@ -87,6 +87,7 @@ h1, h2, p, a {
 }
 
 .output, .result {
+    font-size: 1.4em;
     margin-top: 1em;
     text-align: center;
     color: #fff;
@@ -102,4 +103,10 @@ h1, h2, p, a {
 
 .score {
     font-size: 1.5em;
+}
+
+.intermediate-loading {
+    font-size: 0.8em;
+    margin-top: 0.5em;
+    color: #fff;
 }

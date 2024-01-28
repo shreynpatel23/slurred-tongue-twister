@@ -10,13 +10,13 @@ const phrases = [
   "Peter Piper picked a peck of pickled peppers How many pickled peppers did Peter Piper pick",
   "I saw Susie sitting in a shoeshine shop Where she sits she shines and where she shines she sits",
   "Unique New York unique New York unique New York",
-  "Six slippery snails slid silently seaward",
+  "6 slippery snails slid silently seaward",
   "How much wood would a woodchuck chuck if a woodchuck could chuck wood",
-  "Six slippery snails slid slowly seaward sailing silently",
+  "6 slippery snails slid slowly seaward sailing silently",
   "I thought a thought but the thought I thought wasn't the thought I thought I thought",
   "I slit a sheet a sheet I slit and on a slitted sheet I sit",
   "Rubber baby buggy bumpers",
-  "Eleven benevolent elephants",
+  "11 benevolent elephants",
   "I scream you scream we all scream for ice cream",
 ];
 
@@ -82,6 +82,7 @@ const phraseText = document.getElementById("phrase");
 const recordButton = document.getElementById("record-button");
 const svg = document.getElementById("svg");
 const loading = document.getElementById("loading");
+const IMLoading = document.getElementById("intermediate-loading");
 const matchResult = document.getElementById("matchResult");
 const scoreValue = document.getElementById("score");
 const textReceived = document.getElementById("text-received");
@@ -104,7 +105,7 @@ function randomPhrase() {
 }
 
 function timeCounter() {
-  var minutes = 0.5;
+  var minutes = 2;
   var seconds = minutes * 60;
   var interval = setInterval(() => {
     seconds = seconds - 1;
@@ -140,6 +141,60 @@ function testSpeech() {
 
   recognition.start();
 
+  recognition.onstart = function (event) {
+    //Fired when the speech recognition service has begun listening to incoming audio with intent to recognize grammars associated with the current SpeechRecognition.
+    console.log("SpeechRecognition.onstart");
+  };
+
+  recognition.onaudiostart = function (event) {
+    //Fired when the user agent has started to capture audio.
+    IMLoading.innerHTML = `We are listening, you sound amazing!`;
+    console.log("SpeechRecognition.onaudiostart");
+  };
+
+  recognition.onsoundstart = function (event) {
+    //Fired when any sound — recognisable speech or not — has been detected.
+    console.log("SpeechRecognition.onsoundstart");
+  };
+
+  recognition.onspeechstart = function (event) {
+    //Fired when sound that is recognised by the speech recognition service as speech has been detected.
+    console.log("SpeechRecognition.onspeechstart");
+  };
+
+  recognition.onnomatch = function (event) {
+    //Fired when the speech recognition service returns a final result with no significant recognition. This may involve some degree of recognition, which doesn't meet or exceed the confidence threshold.
+    console.log("SpeechRecognition.onnomatch");
+  };
+
+  recognition.onspeechend = function () {
+    recognition.stop();
+    recordButton.disabled = false;
+    toggleSvg();
+  };
+
+  recognition.onsoundend = function (event) {
+    //Fired when any sound — recognisable speech or not — has stopped being detected.
+    console.log("SpeechRecognition.onsoundend");
+  };
+
+  recognition.onaudioend = function (event) {
+    //Fired when the user agent has finished capturing audio.
+    IMLoading.innerHTML = '';
+    console.log("SpeechRecognition.onaudioend");
+  };
+
+  recognition.onend = function (event) {
+    //Fired when the speech recognition service has disconnected.
+    console.log("SpeechRecognition.onend");
+  };
+
+  recognition.onerror = function (event) {
+    recordButton.disabled = false;
+    phraseText.textContent =
+      "Error occurred in recognition: " + event.error;
+  };
+
   recognition.onresult = function (event) {
     // The SpeechRecognitionEvent results property returns a SpeechRecognitionResultList object
     // The SpeechRecognitionResultList object contains SpeechRecognitionResult objects.
@@ -152,9 +207,6 @@ function testSpeech() {
     var speechResult = event.results[0][0].transcript.toLowerCase();
     textReceived.innerHTML = "Speech received: " + speechResult + ".";
 
-    // if(speechResult == "" || speechResult == null || speechResult == undefined){
-      
-    // }
     if (speechResult == phrase) {
       const randomNumber = Math.ceil(Math.random() * 20);
       matchResult.textContent = positiveMessages[randomNumber];
@@ -179,57 +231,6 @@ function testSpeech() {
       window.speechSynthesis.speak(utter);
       setTimeout("showPhrase()", 1000);
     }
-  };
-
-  recognition.onspeechend = function () {
-    recognition.stop();
-    recordButton.disabled = false;
-  };
-
-  recognition.onerror = function (event) {
-    recordButton.disabled = false;
-    phraseText.textContent =
-      "Error occurred in recognition: " + event.error;
-  };
-
-  recognition.onaudiostart = function (event) {
-    //Fired when the user agent has started to capture audio.
-    console.log("SpeechRecognition.onaudiostart");
-  };
-
-  recognition.onaudioend = function (event) {
-    //Fired when the user agent has finished capturing audio.
-    console.log("SpeechRecognition.onaudioend");
-  };
-
-  recognition.onend = function (event) {
-    //Fired when the speech recognition service has disconnected.
-    toggleSvg();
-    console.log("SpeechRecognition.onend");
-  };
-
-  recognition.onnomatch = function (event) {
-    //Fired when the speech recognition service returns a final result with no significant recognition. This may involve some degree of recognition, which doesn't meet or exceed the confidence threshold.
-    console.log("SpeechRecognition.onnomatch");
-  };
-
-  recognition.onsoundstart = function (event) {
-    //Fired when any sound — recognisable speech or not — has been detected.
-    console.log("SpeechRecognition.onsoundstart");
-  };
-
-  recognition.onsoundend = function (event) {
-    //Fired when any sound — recognisable speech or not — has stopped being detected.
-    console.log("SpeechRecognition.onsoundend");
-  };
-
-  recognition.onspeechstart = function (event) {
-    //Fired when sound that is recognised by the speech recognition service as speech has been detected.
-    console.log("SpeechRecognition.onspeechstart");
-  };
-  recognition.onstart = function (event) {
-    //Fired when the speech recognition service has begun listening to incoming audio with intent to recognize grammars associated with the current SpeechRecognition.
-    console.log("SpeechRecognition.onstart");
   };
 }
 
