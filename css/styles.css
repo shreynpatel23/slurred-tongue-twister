@@ -10,7 +10,7 @@ body {
 }
 
 img{
-    width: 200px;
+    width: 150px;
     height: auto;
 }
 
@@ -19,7 +19,7 @@ h1, h2, p, a {
 }
 
 .brand-name {
-    font-size: 2em;
+    font-size: 1.5em;
     line-height: 1.5;
     color: #fff;
     text-align: center;
@@ -39,14 +39,14 @@ h1, h2, p, a {
 }
 
 .timer {
-    font-size: 2em;
+    font-size: 1.5em;
     margin-bottom: 1em;
     color: #fff;
     text-align: center;
 }
 
 .text {
-    font-size: 3em;
+    font-size: 2.5em;
     line-height: 1.5;
     color: #fff;
     text-align: center;

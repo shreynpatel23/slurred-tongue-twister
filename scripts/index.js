@@ -2,8 +2,6 @@ var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var SpeechRecognitionEvent =
   SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
 const phrases = [
-  "How are you",
-  "you can pronounce it",
   "Fuzzy Wuzzy was a bear Fuzzy Wuzzy had no hair Fuzzy Wuzzy wasn't very fuzzy was he",
   "She sells sea shells by the sea shore The shells she sells are surely seashells So if she sells shells on the seashore I'm sure she sells seashore shells",
   "How can a clam cram in a clean cream can",
@@ -17,6 +15,9 @@ const phrases = [
   "I slit a sheet a sheet I slit and on a slitted sheet I sit",
   "Rubber baby buggy bumpers",
   "11 benevolent elephants",
+  "A proper copper coffee pot",
+  "Fred fed Ted bread and Ted fed Fred bread",
+  "A black bug bleeds black blood what color blood does a blue bug bleed",
   "I scream you scream we all scream for ice cream",
 ];
 
@@ -65,6 +66,7 @@ const negativeMessages = [
   "Majestic in failure",
 ];
 
+let hasUserSpoken = false;
 let score = 0;
 let isPhraseVisible = false;
 let sentenceCount = 0;
@@ -91,6 +93,7 @@ const finalScore = document.getElementById("final-score");
 const endGameButton = document.getElementById("end-game");
 const maxScoreWrapper = document.querySelector('.max-score');
 const maxScoreValue = document.getElementById('max-score');
+const userSpokenError = document.getElementById('hasUserSpoken');
 
 timerWrapper.style.display = "none";
 phraseWrapper.style.display = "none";
@@ -168,8 +171,11 @@ function testSpeech() {
     console.log("SpeechRecognition.onnomatch");
   };
 
-  recognition.onspeechend = function () {
-    recognition.stop();
+  recognition.onspeechend = function (event) {
+    if (!hasUserSpoken) {
+      userSpokenError.innerHTML = "We did not get your message, Can you please speak again";
+    }
+    console.log('event', event);
     recordButton.disabled = false;
     toggleSvg();
   };
@@ -187,6 +193,7 @@ function testSpeech() {
 
   recognition.onend = function (event) {
     //Fired when the speech recognition service has disconnected.
+    recognition.stop();
     console.log("SpeechRecognition.onend");
   };
 
@@ -206,6 +213,11 @@ function testSpeech() {
     // The second [0] returns the SpeechRecognitionAlternative at position 0.
     // We then return the transcript property of the SpeechRecognitionAlternative object
     var speechResult = event.results[0][0].transcript.toLowerCase();
+    if(speechResult) {
+      hasUserSpoken = true
+    };
+    userSpokenError.innerHTML = "";
+
     textReceived.innerHTML = "Speech received: " + speechResult + ".";
 
     if (speechResult == phrase) {
@@ -223,7 +235,7 @@ function testSpeech() {
       imgContainer.innerHTML = "<img src='./images/positive.png' height='100px' width='100px'></img>";
       setTimeout(function () {
         imgContainer.innerHTML = "";
-      }, 2000);
+      }, 3000);
 
     } else {
       // fire the negative feedback
@@ -239,7 +251,7 @@ function testSpeech() {
       imgContainer.innerHTML = "<img src='./images/negative.png' height='100px' width='100px'></img>";
       setTimeout(function () {
         imgContainer.innerHTML = "";
-      }, 2000);
+      }, 3000);
     }
   };
 }
@@ -268,7 +280,7 @@ function showPhrase() {
   setTimeout(function (){
     textReceived.innerHTML = "";
     matchResult.innerHTML = "";
-  }, 1500);
+  }, 2000);
   //console.log(score/sentenceCount);
 }
 // add all event listners here
