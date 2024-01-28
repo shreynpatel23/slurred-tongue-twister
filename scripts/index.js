@@ -66,7 +66,8 @@ const negativeMessages = [
 ];
 
 let score = 0;
-
+let isPhraseVisible = false;
+let sentenceCount = 0;
 const timerWrapper = document.getElementById("timer-wrapper");
 const startWrapper = document.getElementById("start-game-wrapper");
 const phraseWrapper = document.getElementById("phrase-wrapper");
@@ -121,12 +122,9 @@ function testSpeech() {
   recordButton.disabled = true;
   toggleLoading();
 
-  var phrase = phrases[randomPhrase()];
-  // To ensure case consistency while checking with the returned output text
-  phrase = phrase.toLowerCase();
-  phraseText.textContent = phrase;
-  //   resultPara.textContent = "Right or wrong?";
-  //   diagnosticPara.textContent = "...diagnostic messages";
+  if(!isPhraseVisible){
+    showPhrase();
+  }
 
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
@@ -165,7 +163,8 @@ function testSpeech() {
       utter.lang = "en-ie";
       window.speechSynthesis.speak(utter);
     }
-
+    isPhraseVisible = false;
+    setTimeout(showPhrase, 2000);
     console.log("Confidence: " + event.results[0][0].confidence);
   };
 
@@ -235,10 +234,24 @@ function toggleSvg() {
   loading.classList.add("hide");
 }
 
+function showPhrase(){
+  var phrase = phrases[randomPhrase()];
+  // To ensure case consistency while checking with the returned output text
+  phrase = phrase.toLowerCase();
+  phraseText.textContent = phrase;
+  isPhraseVisible = true;
+  //   resultPara.textContent = "Right or wrong?";
+  //   diagnosticPara.textContent = "...diagnostic messages";
+  sentenceCount++;
+  //console.log(score/sentenceCount);
+}
 // add all event listners here
 recordButton.addEventListener("click", testSpeech);
 
 startGameButton.addEventListener("click", function () {
+  if(!isPhraseVisible){
+    showPhrase();
+  }
   startWrapper.style.display = "none";
   phraseWrapper.style.display = "block";
   timerWrapper.style.display = "block";
