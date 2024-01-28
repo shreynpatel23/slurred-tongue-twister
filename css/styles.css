@@ -1,10 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Single+Day&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Happy+Monkey&display=swap');
 
 body {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Single Day', cursive;
+    font-family: 'Happy Monkey', system-ui;
     background: #e8547b;
     padding: 2em;
 }
@@ -23,6 +23,11 @@ h1, h2, p, a {
     line-height: 1.5;
     color: #fff;
     text-align: center;
+    margin-bottom: 0;
+}
+
+.max-score {
+    margin-top: 0;
     margin-bottom: 1em;
 }
 
