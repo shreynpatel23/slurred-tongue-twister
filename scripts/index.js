@@ -120,7 +120,7 @@ function timeCounter() {
       clearInterval(interval);
       if (score > maxScore) {
         localStorage.setItem('maxScore', score);
-        winnerImg.innerHTML = "<img src='./images/winner.png' height='100px' width='100px'></img>";
+        winnerImg.innerHTML = "<p class='result'>You are the new high scorer!!!</p><img src='./images/winner.png' height='100px' width='100px'></img>";
       }
       timerWrapper.style.display = "none";
       phraseWrapper.style.display = "none";
@@ -265,6 +265,10 @@ function showPhrase() {
   phraseText.textContent = phrase;
   isPhraseVisible = true;
   sentenceCount++;
+  setTimeout(function (){
+    textReceived.innerHTML = "";
+    matchResult.innerHTML = "";
+  }, 1500);
   //console.log(score/sentenceCount);
 }
 // add all event listners here
