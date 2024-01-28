@@ -75,7 +75,8 @@ const timerWrapper = document.getElementById("timer-wrapper");
 const startWrapper = document.getElementById("start-game-wrapper");
 const phraseWrapper = document.getElementById("phrase-wrapper");
 const resultWrapper = document.getElementById("result-wrapper");
-
+const imgContainer = document.getElementById("img-container");
+const winnerImg = document.getElementById("winner-img");
 const timeValue = document.getElementById("timeValue");
 const startGameButton = document.getElementById("start-game");
 const phraseText = document.getElementById("phrase");
@@ -112,14 +113,14 @@ function timeCounter() {
     const sec = seconds % 60;
     const min = parseInt(seconds / 60);
 
-    timeValue.innerHTML = `${min <= 9 ? `0${min}` : min} : ${
-      sec <= 9 ? `0${sec}` : sec
-    }`;
-    finalScore.innerHTML = `Your game has ended your <br /> score is ${score}`;
+    timeValue.innerHTML = `${min <= 9 ? `0${min}` : min} : ${sec <= 9 ? `0${sec}` : sec
+      }`;
+    finalScore.innerHTML = `Your game has ended  <br /> your score is ${score}`;
     if (seconds === 0) {
       clearInterval(interval);
-      if(score > maxScore) {
+      if (score > maxScore) {
         localStorage.setItem('maxScore', score);
+        winnerImg.innerHTML = "<img src='./images/winner.png' height='100px' width='100px'></img>";
       }
       timerWrapper.style.display = "none";
       phraseWrapper.style.display = "none";
@@ -132,7 +133,7 @@ function testSpeech() {
   recordButton.disabled = true;
   toggleLoading();
 
-  if(!isPhraseVisible){
+  if (!isPhraseVisible) {
     showPhrase();
   }
 
@@ -215,11 +216,16 @@ function testSpeech() {
       scoreValue.innerHTML = `score ${score}`;
       var utter = new window.SpeechSynthesisUtterance(
         positiveMessages[randomNumber]
-        );
-        utter.lang = "en-ca";
-        window.speechSynthesis.speak(utter);
-        setTimeout("showPhrase()", 1000);
-      } else {
+      );
+      utter.lang = "en-ca";
+      window.speechSynthesis.speak(utter);
+      setTimeout("showPhrase()", 1000);
+      imgContainer.innerHTML = "<img src='./images/positive.png' height='100px' width='100px'></img>";
+      setTimeout(function () {
+        imgContainer.innerHTML = "";
+      }, 1500);
+
+    } else {
       // fire the negative feedback
       const randomNumber = Math.ceil(Math.random() * 20);
       matchResult.textContent = negativeMessages[randomNumber];
@@ -230,6 +236,10 @@ function testSpeech() {
       utter.lang = "en-ie";
       window.speechSynthesis.speak(utter);
       setTimeout("showPhrase()", 1000);
+      imgContainer.innerHTML = "<img src='./images/negative.png' height='100px' width='100px'></img>";
+      setTimeout(function () {
+        imgContainer.innerHTML = "";
+      }, 1500);
     }
   };
 }
@@ -248,7 +258,7 @@ function toggleSvg() {
   loading.classList.add("hide");
 }
 
-function showPhrase(){
+function showPhrase() {
   // To ensure case consistency while checking with the returned output text
   let newPhrase = phrases[randomPhrase()];
   phrase = newPhrase.toLowerCase();
@@ -261,7 +271,7 @@ function showPhrase(){
 recordButton.addEventListener("click", testSpeech);
 
 startGameButton.addEventListener("click", function () {
-  if(!isPhraseVisible){
+  if (!isPhraseVisible) {
     showPhrase();
   }
   startWrapper.style.display = "none";
