@@ -1,6 +1,6 @@
-var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 var SpeechRecognitionEvent =
-  SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+  window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 const phrases = [
   "How are you",
   "you can pronounce it",
@@ -89,6 +89,8 @@ phraseWrapper.style.display = "none";
 resultWrapper.style.display = "none";
 loading.style.display = "none";
 
+var recognition = new SpeechRecognition();
+
 function randomPhrase() {
   var number = Math.floor(Math.random() * phrases.length);
   return number;
@@ -107,6 +109,7 @@ function timeCounter() {
     }`;
     if (seconds === 0) {
       clearInterval(interval);
+      recognition.stop();
       timerWrapper.style.display = "none";
       phraseWrapper.style.display = "none";
       resultWrapper.style.display = "block";
@@ -125,7 +128,6 @@ function testSpeech() {
   //   resultPara.textContent = "Right or wrong?";
   //   diagnosticPara.textContent = "...diagnostic messages";
 
-  var recognition = new SpeechRecognition();
   recognition.interimResults = false;
   recognition.maxAlternatives = 1;
 
@@ -164,7 +166,7 @@ function testSpeech() {
       window.speechSynthesis.speak(utter);
     }
 
-    // console.log('Confidence: ' + event.results[0][0].confidence);
+    console.log("Confidence: " + event.results[0][0].confidence);
   };
 
   recognition.onspeechend = function () {
@@ -174,7 +176,7 @@ function testSpeech() {
 
   recognition.onerror = function (event) {
     recordButton.disabled = false;
-    diagnosticPara.textContent =
+    phraseText.textContent =
       "Error occurred in recognition: " + event.error;
   };
 
