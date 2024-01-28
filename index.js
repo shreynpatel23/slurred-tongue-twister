@@ -1,4 +1,4 @@
-var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var SpeechRecognitionEvent =
   window.SpeechRecognitionEvent || window.webkitSpeechRecognitionEvent;
 const phrases = [
