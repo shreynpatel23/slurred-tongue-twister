@@ -223,7 +223,7 @@ function testSpeech() {
       imgContainer.innerHTML = "<img src='./images/positive.png' height='100px' width='100px'></img>";
       setTimeout(function () {
         imgContainer.innerHTML = "";
-      }, 1500);
+      }, 2000);
 
     } else {
       // fire the negative feedback
@@ -239,7 +239,7 @@ function testSpeech() {
       imgContainer.innerHTML = "<img src='./images/negative.png' height='100px' width='100px'></img>";
       setTimeout(function () {
         imgContainer.innerHTML = "";
-      }, 1500);
+      }, 2000);
     }
   };
 }
