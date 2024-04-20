@@ -1,6 +1,7 @@
 var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
 var SpeechRecognitionEvent =
   SpeechRecognitionEvent || webkitSpeechRecognitionEvent;
+
 const phrases = [
   "Fuzzy Wuzzy was a bear Fuzzy Wuzzy had no hair Fuzzy Wuzzy wasn't very fuzzy was he",
   "She sells sea shells by the sea shore The shells she sells are surely seashells So if she sells shells on the seashore I'm sure she sells seashore shells",
